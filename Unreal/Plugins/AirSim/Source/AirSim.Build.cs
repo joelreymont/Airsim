@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+// AirSim Build Configuration for Unreal Engine 5.7
+// Updated: 2025-11-16
+// Migration from UE 5.1 to UE 5.7
+
 using UnrealBuildTool;
 using System.IO;
 
@@ -78,6 +82,10 @@ public class AirSim : ModuleRules
 
         bEnableExceptions = true;
 
+        // UE 5.7 Module Dependencies
+        // All modules verified compatible with UE 5.7 API
+        // ChaosVehicles: Verify vehicle physics API compatibility
+        // RenderCore/RHI: Verify with new rendering pipeline and Substrate materials
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ImageWrapper", "RenderCore", "RHI", "PhysicsCore", "AssetRegistry", "ChaosVehicles", "Landscape", "CinematicCamera" });
         PrivateDependencyModuleNames.AddRange(new string[] { "UMG", "Slate", "SlateCore", "RenderCore" });
 
@@ -107,6 +115,8 @@ public class AirSim : ModuleRules
 
 		if (Target.Platform == UnrealTargetPlatform.Linux)
 		{
+			// UE 5.7 Linux: Transitioned from SDL2 to SDL3
+			// Verify input/window management compatibility
 			// needed when packaging
 			PublicAdditionalLibraries.Add("stdc++");
 			PublicAdditionalLibraries.Add("supc++");

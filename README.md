@@ -10,8 +10,7 @@ The company managing this repo created the SWARM Developer System to help build,
 multi-agent autonomous systems. Check it out here: [SWARM Developer System](https://www.swarmsim.io/overview/developer)
   
 ## IMPORTANT ANNOUNCEMENT
-Moving forward, we are now using Unreal Engine 5 version 5.03 or greater! If you
-want to use UE4.27, you can use the branch `ue4.27`.
+Moving forward, we are now using Unreal Engine 5 version 5.7! For UE 5.1, use the branch `ue5.1`. For UE4.27, use the branch `ue4.27`.
   
 ## Currently Supported Operating Systems
 Below are the list of officially supported Operating Systems, with full Unreal Engine support:
