@@ -1,5 +1,10 @@
 name: MacOS Build
 
+# This workflow builds AirLib component
+# Note: macOS support is experimental and may be deprecated
+# Note: Does NOT build Unreal Engine plugin (requires UE 5.7 installation)
+# For Unreal plugin verification, see docs/UE57_MIGRATION_GUIDE.md
+
 # Controls when the action will run.
 on: [push, pull_request, workflow_dispatch]
 
