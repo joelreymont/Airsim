@@ -23,17 +23,13 @@ echo "AirSim UE 5.7 Build Verification (macOS)"
 echo "========================================="
 echo ""
 
-# macOS Warning
-echo -e "${YELLOW}WARNING: macOS support is EXPERIMENTAL${NC}"
-echo "- Apple Silicon (M1/M2/M3) is NOT supported"
-echo "- Intel Macs only"
-echo "- May be deprecated in future releases"
+# macOS Information
+echo -e "${GREEN}macOS is supported for UE 5.7${NC}"
+echo "- Apple Silicon (M1/M2/M3): Native support"
+echo "- Intel Macs: Fully supported"
+echo "- Note: M1 chips have Nanite limitations"
+echo "- M2/M3 recommended for full feature set"
 echo ""
-read -p "Continue anyway? (y/N) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    exit 0
-fi
 
 # Step 1: Check macOS version and architecture
 echo -e "${YELLOW}[1/8] Checking macOS system...${NC}"
@@ -55,13 +51,21 @@ ARCH=$(uname -m)
 echo "Architecture: $ARCH"
 
 if [ "$ARCH" = "arm64" ]; then
-    echo -e "${RED}ERROR: Apple Silicon (M1/M2/M3) is NOT supported${NC}"
-    echo "AirSim UE 5.7 requires Intel Mac (x86_64)"
-    exit 1
-fi
+    echo -e "${GREEN}✓ Apple Silicon Mac detected${NC}"
 
-if [ "$ARCH" = "x86_64" ]; then
-    echo -e "${GREEN}✓ Intel Mac detected${NC}"
+    # Try to detect chip generation
+    CHIP_NAME=$(sysctl -n machdep.cpu.brand_string 2>/dev/null || echo "Unknown")
+    echo "Chip: $CHIP_NAME"
+
+    if echo "$CHIP_NAME" | grep -qi "M1"; then
+        echo -e "${YELLOW}⚠️  M1 chip detected - Nanite not supported${NC}"
+        echo "   M2 or M3 recommended for full features"
+    elif echo "$CHIP_NAME" | grep -qiE "M2|M3"; then
+        echo -e "${GREEN}✓ M2/M3 chip - Full features available${NC}"
+        echo "   (Nanite requires macOS 15+ for SM6)"
+    fi
+elif [ "$ARCH" = "x86_64" ]; then
+    echo -e "${GREEN}✓ Intel Mac detected - Fully supported${NC}"
 else
     echo -e "${YELLOW}WARNING: Unknown architecture: $ARCH${NC}"
 fi
@@ -280,5 +284,8 @@ echo ""
 echo "3. Check build log for warnings:"
 echo "   less \"$PROJECT_ROOT/build_ue57_macos.log\""
 echo ""
-echo -e "${YELLOW}Note: macOS support is experimental. Consider using Windows or Linux for production.${NC}"
+echo -e "${GREEN}macOS native support notes:${NC}"
+echo "- M1: Nanite not supported, other features work"
+echo "- M2/M3: Full features with macOS 15+ (Shader Model 6)"
+echo "- Hardware ray tracing uses software fallback (Lumen)"
 echo ""
